@@ -2,7 +2,7 @@
 Contributors: bjplink
 Tags: flickr
 Requires at least: 3.0
-Tested up to: 3.1
+Tested up to: 3.0.1
 Stable tag: 1.0
 
 flicknpress is a WordPress plugin that lets you attach a cropped photo from Flickr right inside your blog post.
