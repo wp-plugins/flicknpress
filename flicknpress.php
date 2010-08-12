@@ -4,7 +4,7 @@
 	Plugin URI: http://www.brianjlink.com/flicknpress
 	Description: Add Photos from Flickr to Your Blog Posts
 	Author: Brian Link 
-	Version: 1.0 
+	Version: 1.1 
 	Author URI: http://www.brianjlink.com
 	*/
     
@@ -37,8 +37,8 @@
 	{
 		if (function_exists('add_meta_box'))
 		{
-			add_meta_box('bjl_flickr_images', __('Flickr Image', 'bjl_flickr_images'), 'bjl_flickr_image_inner_custom_box', 'post', 'normal', 'high');
-			add_meta_box('bjl_flickr_images', __('Flickr Image', 'bjl_flickr_images'), 'bjl_flickr_image_inner_custom_box', 'page', 'normal', 'high');
+			add_meta_box('bjl_flickr_images', __('flicknpress', 'bjl_flickr_images'), 'bjl_flickr_image_inner_custom_box', 'post', 'normal', 'high');
+			add_meta_box('bjl_flickr_images', __('flicknpress', 'bjl_flickr_images'), 'bjl_flickr_image_inner_custom_box', 'page', 'normal', 'high');
 		}
 	}
 	
@@ -85,9 +85,11 @@
 		// Use nonce for verification
 		echo '<input type="hidden" name="bjl_flickr_image_noncename" id="bjl_flickr_image_noncename" value="'.wp_create_nonce(plugin_basename(__FILE__)).'" />';
 		
+		// KEYWORD(S)
 		echo '<p>'.__("Keyword(s)").'</label> ';
-		echo '<input type="text" name="bjl_flickr_image_keywords" size=25 value="" /> ';
+		echo '<input class="text" type="text" name="bjl_flickr_image_keywords" value="" /> ';
 		
+		// RESULTS
 		echo '<select id="bjl_flickr_image_results" name="bjl_flickr_image_results">';
 		echo '<option value="9">9 '.__("Results").'</option>';
 		echo '<option value="12">12 '.__("Results").'</option>';
@@ -98,7 +100,18 @@
 		echo '<option value="27">27 '.__("Results").'</option>';
 		echo '</select> ';
 		
-		echo ' <input type="button" class="button tagadd" value="'.__("Search").'" onclick="bjl_load_flickr_images(bjl_flickr_image_keywords.value, bjl_flickr_image_results.value);" /></p>';
+		// LICENSE
+		echo '<select id="bjl_flickr_image_license" name="bjl_flickr_image_license">';
+		echo '<option value="4">'.__("Attribution License").'</option>';
+		echo '<option value="6">'.__("Attribution-NoDerivs License").'</option>';
+		echo '<option value="3">'.__("Attribution-NonCommercial-NoDerivs License").'</option>';
+		echo '<option value="2">'.__("Attribution-NonCommercial License").'</option>';
+		echo '<option value="1">'.__("Attribution-NonCommercial-ShareAlike License").'</option>';
+		echo '<option value="5">'.__("Attribution-ShareAlike License").'</option>';
+		echo '<option value="7">'.__("No known copyright restrictions").'</option>';
+		echo '</select> ';
+		
+		echo ' <input type="button" class="button tagadd" value="'.__("Search").'" onclick="bjl_load_flickr_images(bjl_flickr_image_keywords.value, bjl_flickr_image_results.value, bjl_flickr_image_license.value);" /></p>';
 		
 		echo '<div id="bjl_flickr_image_meta"'.($bjl_flickr_image_photo_id ? " style='display:block;'" : "").'>';
 		echo '<div id="bjl_flickr_image_box"></div>';
@@ -135,12 +148,13 @@
 	{
 		?>
 		<script type="text/javascript">
-			function bjl_load_flickr_images($keywords, $results, $cc)
+			function bjl_load_flickr_images($keywords, $results, $license)
 			{
 				var data = {
 					action: 'my_special_action',
 					keywords: $keywords,
-					results: $results
+					results: $results,
+					license: $license
 				};
 				
 				document.getElementById("bjl_flickr_image_meta").style.display = 'block';
@@ -192,12 +206,12 @@
 	{
 		$keywords = $_POST["keywords"];
 		$results = $_POST["results"];
-		$cc = $_POST["cc"];
+		$license = $_POST["license"];
 		
 		require_once("phpFlickr.php");
 		$f = new phpFlickr("de5d9b78dd8961c780be698a726b7b2d", "3157671718c0818f");
 		
-		$args = array("tags"=>$keywords, "sort"=>"recent-desc", "per_page"=>$results);
+		$args = array("tags"=>$keywords, "sort"=>"recent-desc", "per_page"=>$results, "license"=>$license);
 		$photos = $f->photos_search($args);
 		
 		if ($keywords == "")
