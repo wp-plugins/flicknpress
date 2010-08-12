@@ -1,0 +1,4 @@
+div.bjl_flickr_image_left_right { background-repeat: no-repeat; background-position: center; width: 305px; height: 255px; margin-bottom: 10px; }
+div.bjl_flickr_image_center { background-repeat: no-repeat; background-position: center; width: 500px; height: 255px; margin-bottom: 10px; }
+div.bjl_flickr_image_left_right p, div.bjl_flickr_image_center p { background-color: #565656; color: #EFEFEF; padding: 2px 5px; font-size: 12px; }
+div.bjl_flickr_image_left_right a, div.bjl_flickr_image_center a { color: #FFFFFF; }
